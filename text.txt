@@ -1,0 +1,7 @@
+# class photoMill():
+#     def __init__(self):
+#         self.filename = None
+#         self.original = None
+#         self.image = None
+#         self.save_folder = 'edits/'
+#         self.save_filename = None
