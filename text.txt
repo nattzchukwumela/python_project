@@ -5,3 +5,14 @@
 #         self.image = None
 #         self.save_folder = 'edits/'
 #         self.save_filename = None
+
+
+# btn_left = QPushButton('left')
+# btn_right = QPushButton('right')
+# btn_mirror = QPushButton('mirror')
+# btn_sharpness = QPushButton('sharpness')
+# btn_grey = QPushButton('b/w')
+# btn_contrast = QPushButton('contrast')
+# btn_blur = QPushButton('blur')
+# btn_color = QPushButton('color')
+# btn_brightness = QPushButton('brightness')
