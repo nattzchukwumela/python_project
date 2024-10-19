@@ -1,9 +1,9 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QFileDialog, QPushButton, QListWidget, QComboBox, QHBoxLayout, QVBoxLayout, QGridLayout
+from PyQt5.QtWidgets import QApplication, QDialog, QWidget, QLabel, QFileDialog, QPushButton, QListWidget, QComboBox, QHBoxLayout, QVBoxLayout, QGridLayout
 from PyQt5.QtCore import Qt
 import os
 from PyQt5.QtGui import QPixmap
 from PIL import Image, ImageEnhance, ImageFilter
-from style import btn_style
+from module import btn_style, img_ext
 
 # Initialise App
 app = QApplication([])
@@ -19,6 +19,7 @@ img_list = QListWidget()
 # Image Box
 img_box = QLabel('Image will appear here')
 img_box.setStyleSheet('text-align: center; border-style: solid; border-color: blue; border-width: 2px; color: green; font-size: 32px;')
+img_box.setAlignment(Qt.AlignCenter)
 
 # Layout Containers
 main_layout = QVBoxLayout()
@@ -50,12 +51,42 @@ for button_text in buttons:
 # layout spacings
 grid.setContentsMargins(5, 10, 5, 10)
 
+#layout widgets
 img_container.addWidget(img_box)
 img_list_con.addWidget(folder)
 img_list_con.addWidget(img_list)
 container1.addLayout(grid, 70)
 container1.addLayout(img_list_con, 30)
 
+# getting directory functionality
+imgDirectory = ""
+def filter(files, extensions):
+    results = []
+    for file in files:
+        for ext in extensions:
+            if file.endswith(ext):
+                results.append(file)
+    return results
+
+# get working directory for images
+def getWorkDirectory():
+    global imgDirectory
+    imgSelectedDirectory = QFileDialog.getExistingDirectory()
+    imgNames = filter(os.listdir(imgSelectedDirectory), img_ext)
+    img_list.clear()
+    for imgName in imgNames:
+        img_list.addItem(imgName)
+
+
+class photoMill():
+    def __init__(self):
+        self.filename = None
+        self.original = None
+        self.image = None
+        self.save_folder = 'edits/'
+        self.save_filename = None
+
+folder.clicked.connect(getWorkDirectory)
 main_layout.addLayout(img_container, 80)
 main_layout.addLayout(container1, 20)
 # Execute Code
