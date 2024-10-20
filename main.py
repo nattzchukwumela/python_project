@@ -71,14 +71,16 @@ def filter(files, extensions):
 # get working directory for images
 def getWorkDirectory():
     global imgDirectory
-    imgSelectedDirectory = QFileDialog.getExistingDirectory()
-    imgNames = filter(os.listdir(imgSelectedDirectory), img_ext)
-    img_list.clear()
-    for imgName in imgNames:
-        img_list.addItem(imgName)
+    imgDirectory = QFileDialog.getExistingDirectory()
+    if imgDirectory:
+        imgNames = filter(os.listdir(imgDirectory), img_ext)
+        img_list.clear()
+        for imgName in imgNames:
+            img_list.addItem(imgName)
 
 
-class photoMill():
+
+class PhotoMill():
     def __init__(self):
         self.filename = None
         self.original = None
@@ -86,10 +88,38 @@ class photoMill():
         self.save_folder = 'edits/'
         self.save_filename = None
 
+    def load_image(self, filename):
+        self.filename = filename
+        fullname = os.path.join(imgDirectory, filename)
+        self.image = Image.open(fullname)
+        self.original = self.image.copy()
+
+    def show_image(self, path):
+        img_box.hide()
+        displayImg = QPixmap(path)
+        width, height = img_box.width(), img_box.height()
+        displayImg.scaled(width, height, Qt.KeepAspectRatio)
+        img_box.setPixmap(displayImg)
+        img_box.show()
+
+
+def displayImage():
+  global imgDirectory
+  if img_list.currentRow() >= 0:
+      filename = img_list.currentItem().text()
+      main.load_image(filename)
+      main.show_image(os.path.join(imgDirectory, main.filename))
+
+main = PhotoMill()
+
+# button events
 folder.clicked.connect(getWorkDirectory)
+img_list.currentRowChanged.connect(displayImage)
+# managing layouts
 main_layout.addLayout(img_container, 80)
 main_layout.addLayout(container1, 20)
-# Execute Code
 main_window.setLayout(main_layout)
+
+# Execute App
 main_window.show()
 app.exec_()
