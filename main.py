@@ -53,19 +53,16 @@ class PhotoMill:
         img_box.setPixmap(display_img)
         img_box.show()
 
-    def original_img(self, path):
-        image = QPixmap(path)
-        w, h = img_box.width(), img_box.height()
-        image.scaled(w, h, Qt.KeepAspectRatio)
-        img_box.setPixmap(self.original)
-        img_box.show()
+    def original_img(self):
+        # Restore the image to its original state
+        self.image = self.original.copy()  # Copy the original image
+        self.show_image(os.path.join(img_directory, self.filename))
 
     def edit_img(self, transformation):
-        """
-           'left', 'right', 'mirror',
-    'contrast', 'sharpen', 'color',
-    'saturation', 'blur', 'grey'
-        """
+        if transformation == 'original':
+            self.original_img()
+            return
+
         transformations = {
             'left': lambda image: image.transpose(Image.ROTATE_90),
             'right': lambda image: image.transpose(Image.ROTATE_270),
@@ -75,7 +72,6 @@ class PhotoMill:
             'blur': lambda image: image.filter(ImageFilter.BLUR),
             'grey': lambda image: image.convert('L'),
             'contrast': lambda image: ImageEnhance.Contrast(image).enhance(1.2),
-            'original': lambda : self.original_img()
         }
         get_transform = transformations.get(transformation)
         if get_transform:
@@ -83,7 +79,6 @@ class PhotoMill:
             self.save_img()
             img_path = os.path.join(img_directory, self.save_folder, self.filename)
             self.show_image(img_path)
-
 
 # Layout Containers
 main_layout = QVBoxLayout()
