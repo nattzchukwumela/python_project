@@ -20,5 +20,8 @@ This repository aims to:
 Connect with Me
 Feel free to explore my projects, provide feedback, and connect with me on:
 
+## Connect with Me
+
+* Facebook: [https://www.facebook.com/nattz616/)
 Best regards,
 Nattz
